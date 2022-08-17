@@ -5,7 +5,7 @@ const Button = (props) =>
     {props.text}
   </button>
 
-const Display = ({text, amount}) => <div>{text} {amount}</div>
+const StatisticLine = ({text, amount}) => <div>{text} {amount}</div>
 
 const Statistics = ({good, neutral, bad}) => {
   if (good === 0 && neutral === 0 && bad === 0) {
@@ -13,12 +13,12 @@ const Statistics = ({good, neutral, bad}) => {
   }
   return (
     <>
-      <Display text='good' amount={good} />
-      <Display text='neutral' amount={neutral} />
-      <Display text='bad' amount={bad} />
-      <Display text='all' amount={good + neutral + bad} />
-      <Display text='average' amount={(good - bad) / (good + neutral + bad)} />
-      <Display text='positive' amount={good / (good + neutral + bad) * 100 + " %"} />
+      <StatisticLine text='good' amount={good} />
+      <StatisticLine text='neutral' amount={neutral} />
+      <StatisticLine text='bad' amount={bad} />
+      <StatisticLine text='all' amount={good + neutral + bad} />
+      <StatisticLine text='average' amount={(good - bad) / (good + neutral + bad)} />
+      <StatisticLine text='positive' amount={good / (good + neutral + bad) * 100 + " %"} />
     </>
   )
 }
