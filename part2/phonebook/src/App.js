@@ -13,10 +13,14 @@ const PersonForm = ({ addName, newName, newNumber, handleNameChange, handleNumbe
   </form>
 )
 
-const Persons = ({ persons, filter}) => (
+const Person = ({ person, deletePerson}) => (
+  <li>{person.name} {person.number} <button onClick={deletePerson}>delete</button></li>
+)
+
+const Persons = ({ persons, filter, deletePerson}) => (
   <ul>
     {persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
-    .map(person => <li key={person.name}>{person.name} {person.number}</li>)}
+    .map(person => <Person key={person.id} person={person} deletePerson={() => deletePerson(person.id)}/>)}
   </ul>
 )
 
@@ -58,6 +62,20 @@ const App = () => {
       })
   }
 
+  const deletePerson = (id) => {
+    const person = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.deletePerson(id)
+        .then(returnedPerson => {
+          setPersons(persons.filter(person => person.id !== id))
+        }).catch(error => {
+          alert(`Information of ${person.name} has already been removed from server`)
+          setPersons(persons.filter(person => person.id !== id))
+        }
+        )
+    }
+  }
+
   useEffect(() => {
     console.log('effect')
     personService.getAll()
@@ -74,7 +92,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm addName={addName} newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={filter} />
+      <Persons persons={persons} filter={filter} deletePerson={deletePerson}/>
     </div>
   )
 }
