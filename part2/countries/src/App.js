@@ -9,7 +9,7 @@ const DisplayCountry = ({ country }) => {
       .then(response => {
         setWeather(response.data)
       })
-  }, [country.name.common])
+  }, [country.capital])
 
   if (weather)
   return (
