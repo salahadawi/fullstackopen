@@ -28,10 +28,9 @@ const Notification = ({ message }) => {
   if (message === null) {
     return null
   }
-
   return (
-    <div className='success'>
-      {message}
+    <div className={message.style}>
+      {message.text}
     </div>
   )
 }
@@ -69,7 +68,13 @@ const App = () => {
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson))
           }).catch(error => {
-            alert(`${error.response.data.error}`)
+            setMessage(
+              {text: `Information of ${person.name} has already been removed from server`, style: 'error'}
+            )
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+            setPersons(persons.filter(person => person.name !== newName))
           }).then(() => {
             setNewName('')
             setNewNumber('')
@@ -90,7 +95,7 @@ const App = () => {
         })
     }
     setMessage(
-      `Added ${newName}`
+      {text: `Added ${newName}`, style: 'success'}
     )
     setTimeout(() => {
       setMessage(null)
@@ -104,7 +109,12 @@ const App = () => {
         .then(returnedPerson => {
           setPersons(persons.filter(person => person.id !== id))
         }).catch(error => {
-          alert(`Information of ${person.name} has already been removed from server`)
+          setMessage(
+            {text: `Information of ${person.name} has already been removed from server`, style: 'error'}
+          )
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
           setPersons(persons.filter(person => person.id !== id))
         }
         )
