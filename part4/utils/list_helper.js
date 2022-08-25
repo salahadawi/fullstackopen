@@ -13,4 +13,14 @@ const favoriteBlog = (blogs) => {
   return blogs.find(blog => blog.likes === maxLikes)
 }
 
-module.exports = { dummy, totalLikes, favoriteBlog }
+const mostBlogs = (blogs) => {
+  const authors = blogs.map(blog => blog.author)
+  const authorCount = authors.reduce((count, author) => {
+    count[author] = (count[author] || 0) + 1
+    return count
+  }, {})
+  const maxCount = Math.max(...Object.values(authorCount))
+  return Object.keys(authorCount).find(author => authorCount[author] === maxCount)
+}
+
+module.exports = { dummy, totalLikes, favoriteBlog, mostBlogs }
