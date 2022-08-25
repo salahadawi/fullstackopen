@@ -102,14 +102,29 @@ describe('favorite blog', () => {
 describe('most blogs', () => {
   test('when list has only one blog, equals the author of that', () => {
     const result = listHelper.mostBlogs(listWithOneBlog)
-    expect(result).toBe('Edsger W. Dijkstra')
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', blogs: 1 })
   })
   test('when list has multiple blogs, equals the author with most blogs', () => {
     const result = listHelper.mostBlogs(listWithMultipleBlogs)
-    expect(result).toBe('Robert C. Martin')
+    expect(result).toEqual({ author: 'Robert C. Martin', blogs: 3 })
   })
   test('when list is empty, equals undefined', () => {
-    const result = listHelper.mostBlogs([])
-    expect(result).toBe(undefined)
+    const result = listHelper.mostBlogs({ author: undefined, blogs: -Infinity })
+    expect(result).toBe(null)
+  })
+})
+
+describe('most likes', () => {
+  test('when list has only one blog, equals the author of that', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 5 })
+  })
+  test('when list has multiple blogs, equals the author with most likes', () => {
+    const result = listHelper.mostLikes(listWithMultipleBlogs)
+    expect(result).toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
+  })
+  test('when list is empty, equals undefined', () => {
+    const result = listHelper.mostLikes([])
+    expect(result).toBe(null)
   })
 })
