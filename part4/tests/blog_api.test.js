@@ -25,6 +25,24 @@ test('the unique identifier property of a blog post is named id', async () => {
   expect(response.body[0].id).toBeDefined()
 })
 
+test('a valid blog can be added', async () => {
+  const newBlog = {
+    title: 'async/await simplifies making async calls',
+    author: 'Michael Chan',
+    url: 'https://reactpatterns.com/',
+    likes: 7
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const blogsAtEnd = await helper.blogsInDb()
+  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+  expect(blogsAtEnd.map(blog => blog.title)).toContain(newBlog.title)
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
