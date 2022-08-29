@@ -95,6 +95,46 @@ describe('deletion of a blog', () => {
   })
 })
 
+describe('updating a blog', () => {
+  test('succeeds with status code 200 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updatedBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: blogToUpdate.likes + 1
+    }
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(updatedBlog)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    expect(blogsAtEnd.filter(blog => blog.id === blogToUpdate.id)[0].likes).toBe(updatedBlog.likes)
+  })
+  test('fails with status code 400 if id is invalid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+
+    const updatedBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: blogToUpdate.likes + 1
+    }
+
+    await api
+      .put('/api/blogs/123')
+      .send(updatedBlog)
+      .expect(400)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
