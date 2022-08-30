@@ -165,6 +165,83 @@ describe('when there is initially one user in db', () => {
   })
 })
 
+describe('login', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', name: 'Superuser', passwordHash })
+    await user.save()
+  })
+
+  test('succeeds with correct credentials', async () => {
+    const user = {
+      username: 'root',
+      password: 'sekret',
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(user)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.token).toBeDefined()
+  })
+
+  test('fails with wrong password', async () => {
+    const user = {
+      username: 'root',
+      password: 'wrong',
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(user)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('invalid username or password')
+  })
+
+  test('fails with wrong username', async () => {
+    const user = {
+      username: 'wrong',
+      password: 'sekret',
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(user)
+      .expect(401)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('invalid username or password')
+  })
+
+  test('fails with missing username', async () => {
+    const user = {
+      password: 'sekret',
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('username or password missing')
+  })
+
+  test('fails with missing password', async () => {
+    const user = {
+      username: 'root',
+    }
+
+    const result = await api
+      .post('/api/login')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+    expect(result.body.error).toContain('username or password missing')
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
