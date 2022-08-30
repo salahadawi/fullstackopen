@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const supertest = require('supertest')
 const app = require('../app')
+const Blog = require('../models/blog')
 const User = require('../models/user')
 const helper = require('./test_helper')
 
@@ -15,6 +16,8 @@ describe('when there is initially one user in db', () => {
     const user = new User({ username: 'root', name: 'Superuser', passwordHash })
 
     await user.save()
+
+    await Blog.deleteMany({})
   })
 
   test('creation succeeds with a fresh username', async () => {
@@ -140,6 +143,25 @@ describe('when there is initially one user in db', () => {
 
     const usersAtEnd = await helper.usersInDb()
     expect(usersAtEnd).toHaveLength(usersAtStart.length)
+  })
+
+  test('blog created by user is displayed on users page', async () => {
+    const newBlog = {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7,
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blog = await Blog.findOne({})
+    const user = await User.findOne({})
+    expect(blog.user.toString()).toBe(user.id)
   })
 })
 
