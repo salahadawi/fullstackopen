@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -9,6 +10,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogInput, setBlogInput] = useState({ title: '', author: '', url: '' })
+  const [notification , setNotification] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -42,6 +44,10 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       console.log(exception)
+      setNotification({ text: 'Wrong username or password', style: 'error' })
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     }
   }
 
@@ -68,6 +74,10 @@ const App = () => {
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
         setBlogInput({ title: '', author: '', url: '' })
+        setNotification({ text: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, style: 'success' })
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
       })
   }
 
@@ -105,7 +115,6 @@ const App = () => {
 
   const blogDisplay = () => (
     <>
-      <p>{user.name} logged in {logOutButton()}</p>
       {blogs.map(blog =>
         <Blog key={blog.id} blog={blog} />
       )}
@@ -115,6 +124,8 @@ const App = () => {
   const LoggedInDisplay = () => (
     <>
     <h2>blogs</h2>
+    <Notification message={notification} />
+    <p>{user.name} logged in {logOutButton()}</p>
     {blogForm()}
     {blogDisplay()}
     </>
@@ -123,6 +134,7 @@ const App = () => {
   const LoggedOutDisplay = () => (
     <>
     <h2>log in to application</h2>
+    <Notification message={notification} />
     {loginForm()}
     </>
   )
