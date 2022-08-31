@@ -2,17 +2,33 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
+const bcrypt = require('bcrypt')
 
 const api = supertest(app)
 
+let token = null
 beforeEach(async () => {
+  await User.deleteMany({})
+
+  const passwordHash = await bcrypt.hash('sekret', 10)
+  const user = new User({ username: 'root', name: 'Superuser', passwordHash })
+
+  await user.save()
+
   await Blog.deleteMany({})
 
   for (let blog of helper.initialBlogs) {
+    blog['user'] = user.id
     let blogObject = new Blog(blog)
     await blogObject.save()
   }
+
+  const result = await api
+    .post('/api/login')
+    .send({ username: 'root', password: 'sekret' })
+  token = result.body.token
 })
 
 describe('when there is initially some blogs saved', () => {
@@ -38,6 +54,7 @@ describe('addition of a new blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -55,6 +72,7 @@ describe('addition of a new blog', () => {
     const response = await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -69,7 +87,21 @@ describe('addition of a new blog', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(400)
+  })
+
+  test('adding blog without token returns 401 Unauthorized', async () => {
+    const newBlog = {
+      title: 'async/await simplifies making async calls',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 7
+    }
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(401)
   })
 })
 
@@ -80,6 +112,7 @@ describe('deletion of a blog', () => {
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDb()
@@ -90,7 +123,17 @@ describe('deletion of a blog', () => {
   test('fails with status code 400 if id is invalid', async () => {
     await api
       .delete('/api/blogs/123')
+      .set('Authorization', `bearer ${token}`)
       .expect(400)
+  })
+
+  test('fails with status code 401 if token is missing', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(401)
   })
 })
 

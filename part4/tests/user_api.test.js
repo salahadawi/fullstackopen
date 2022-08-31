@@ -146,6 +146,12 @@ describe('when there is initially one user in db', () => {
   })
 
   test('blog created by user is displayed on users page', async () => {
+    // login as root
+    const result = await api
+      .post('/api/login')
+      .send({ username: 'root', password: 'sekret' })
+    const token = result.body.token
+
     const newBlog = {
       title: 'React patterns',
       author: 'Michael Chan',
@@ -156,6 +162,7 @@ describe('when there is initially one user in db', () => {
     await api
       .post('/api/blogs')
       .send(newBlog)
+      .set('Authorization', `bearer ${token}`)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
