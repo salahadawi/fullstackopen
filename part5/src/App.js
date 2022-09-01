@@ -80,12 +80,32 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
   }
 
+  const handleLike = id => {
+    const blogToLike = blogs.find(blog => blog.id === id)
+    const likedBlog = {
+      ...blogToLike,
+      likes: blogToLike.likes + 1,
+    }
+
+    blogService
+      .update(id, likedBlog)
+      .then(returnedBlog => {
+        console.log(returnedBlog)
+        setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
+      }).catch(error => {
+        setNotification({ text: `error: ${error.response.data.error}`, style: 'error' })
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+      })
+  }
+
   return (
     <div>
       {user ?
         <Display.LoggedInDisplay notification={notification} user={user}
           handleBlogCreate={handleBlogCreate} logOutButton={logOutButton}
-          blogs={blogs} blogFormRef={blogFormRef} /> :
+          blogs={blogs} blogFormRef={blogFormRef} handleLike={handleLike}/> :
         <Display.LoggedOutDisplay notification={notification} handleLogin={handleLogin}
           username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       }

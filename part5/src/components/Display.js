@@ -4,15 +4,15 @@ import Notification from './Notification'
 import BlogForm from './BlogForm'
 import Toggleable from './Toggleable'
 
-const BlogDisplay = ( {blogs} ) => (
+const BlogDisplay = ( {blogs, handleLike} ) => (
   <>
     {blogs.map(blog =>
-      <Blog key={blog.id} blog={blog} />
+      <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog.id)}/>
     )}
   </>
 )
 
-const LoggedInDisplay = ({ notification, user, handleBlogCreate, logOutButton, blogs, blogFormRef }) => (
+const LoggedInDisplay = ({ notification, user, handleBlogCreate, logOutButton, blogs, blogFormRef, handleLike}) => (
   <>
   <h2>blogs</h2>
   <Notification message={notification} />
@@ -20,7 +20,7 @@ const LoggedInDisplay = ({ notification, user, handleBlogCreate, logOutButton, b
   <Toggleable buttonLabel="new blog" ref={blogFormRef}>
     <BlogForm handleBlogCreate={handleBlogCreate}/>
   </Toggleable>
-  <BlogDisplay blogs={blogs} />
+  <BlogDisplay blogs={blogs} handleLike={handleLike}/>
   </>
 )
 
