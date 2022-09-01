@@ -2,21 +2,22 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, screen } from '@testing-library/react'
 import Blog from './components/Blog'
+import userEvent from '@testing-library/user-event'
+
+const blog = {
+  title: 'Test blog',
+  author: 'Test author',
+  url: 'url.com',
+  likes: 0,
+  user: {
+    name: 'Test user',
+    username: 'testuser',
+    id: '5e8f8f8f8f8f8f8f8f8f8f8f'
+  }
+}
 
 describe('<Blog />', () => {
   test('renders content', () => {
-    const blog = {
-      title: 'Test blog',
-      author: 'Test author',
-      url: 'url.com',
-      likes: 0,
-      user: {
-        name: 'Test user',
-        username: 'testuser',
-        id: '5e8f8f8f8f8f8f8f8f8f8f8f'
-      }
-    }
-
     const mockHandler = jest.fn()
 
     render(<Blog blog={blog} handleLike={mockHandler} handleRemove={mockHandler}/>)
@@ -27,5 +28,21 @@ describe('<Blog />', () => {
     expect(screen.queryByText(`${blog.likes} likes`, { exact: false })).not.toBeInTheDocument()
     expect(screen.queryByText(blog.user.name, { exact: false })).not.toBeInTheDocument()
   })
+
+  test('clicking the button displays url and likes', async () => {
+    const mockHandler = jest.fn()
+
+    render(<Blog blog={blog} handleLike={mockHandler} handleRemove={mockHandler}/>)
+
+    const user = userEvent.setup()
+    const button = screen.getByText('view')
+    await user.click(button)
+
+    expect(screen.queryByText(blog.title, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(blog.url, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(`${blog.likes} likes`, { exact: false })).toBeInTheDocument()
+    expect(screen.getByText(blog.user.name, { exact: false })).toBeInTheDocument()
+  })
+
 
 })
