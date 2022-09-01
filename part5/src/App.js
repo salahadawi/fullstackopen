@@ -8,7 +8,6 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogInput, setBlogInput] = useState({ title: '', author: '', url: '' })
   const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
 
@@ -73,21 +72,20 @@ const App = () => {
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        setBlogInput({ title: '', author: '', url: '' })
         setNotification({ text: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, style: 'success' })
         setTimeout(() => {
           setNotification(null)
         }, 5000)
       })
-      blogFormRef.current.toggleVisibility()
+    blogFormRef.current.toggleVisibility()
   }
 
   return (
     <div>
       {user ?
         <Display.LoggedInDisplay notification={notification} user={user}
-          handleBlogCreate={handleBlogCreate} blogInput={blogInput}
-          setBlogInput={setBlogInput} logOutButton={logOutButton} blogs={blogs} blogFormRef={blogFormRef}/> :
+          handleBlogCreate={handleBlogCreate} logOutButton={logOutButton}
+          blogs={blogs} blogFormRef={blogFormRef} /> :
         <Display.LoggedOutDisplay notification={notification} handleLogin={handleLogin}
           username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       }

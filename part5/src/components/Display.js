@@ -12,13 +12,13 @@ const BlogDisplay = ( {blogs} ) => (
   </>
 )
 
-const LoggedInDisplay = ({ notification, user, handleBlogCreate, blogInput, setBlogInput, logOutButton, blogs, blogFormRef }) => (
+const LoggedInDisplay = ({ notification, user, handleBlogCreate, logOutButton, blogs, blogFormRef }) => (
   <>
   <h2>blogs</h2>
   <Notification message={notification} />
   <p>{user.name} logged in {logOutButton()}</p>
   <Toggleable buttonLabel="new blog" ref={blogFormRef}>
-    <BlogForm handleBlogCreate={handleBlogCreate} blogInput={blogInput} setBlogInput={setBlogInput} />
+    <BlogForm handleBlogCreate={handleBlogCreate}/>
   </Toggleable>
   <BlogDisplay blogs={blogs} />
   </>
