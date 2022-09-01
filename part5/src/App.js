@@ -106,7 +106,7 @@ const App = () => {
     if (window.confirm(`remove blog ${blogToRemove.title} by ${blogToRemove.author}`)) {
       blogService
         .remove(id)
-        .then(response => {
+        .then(() => {
           setBlogs(blogs.filter(blog => blog.id !== id))
           setNotification({ text: `blog ${blogToRemove.title} by ${blogToRemove.author} removed`, style: 'success' })
           setTimeout(() => {
