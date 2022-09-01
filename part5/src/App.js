@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Display from './components/Display'
@@ -10,6 +10,7 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [blogInput, setBlogInput] = useState({ title: '', author: '', url: '' })
   const [notification, setNotification] = useState(null)
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -78,6 +79,7 @@ const App = () => {
           setNotification(null)
         }, 5000)
       })
+      blogFormRef.current.toggleVisibility()
   }
 
   return (
@@ -85,7 +87,7 @@ const App = () => {
       {user ?
         <Display.LoggedInDisplay notification={notification} user={user}
           handleBlogCreate={handleBlogCreate} blogInput={blogInput}
-          setBlogInput={setBlogInput} logOutButton={logOutButton} blogs={blogs} /> :
+          setBlogInput={setBlogInput} logOutButton={logOutButton} blogs={blogs} blogFormRef={blogFormRef}/> :
         <Display.LoggedOutDisplay notification={notification} handleLogin={handleLogin}
           username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       }

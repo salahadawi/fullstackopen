@@ -2,6 +2,7 @@ import Blog from './Blog'
 import LoginForm from './LoginForm'
 import Notification from './Notification'
 import BlogForm from './BlogForm'
+import Toggleable from './Toggleable'
 
 const BlogDisplay = ( {blogs} ) => (
   <>
@@ -11,12 +12,14 @@ const BlogDisplay = ( {blogs} ) => (
   </>
 )
 
-const LoggedInDisplay = ({ notification, user, handleBlogCreate, blogInput, setBlogInput, logOutButton, blogs}) => (
+const LoggedInDisplay = ({ notification, user, handleBlogCreate, blogInput, setBlogInput, logOutButton, blogs, blogFormRef }) => (
   <>
   <h2>blogs</h2>
   <Notification message={notification} />
   <p>{user.name} logged in {logOutButton()}</p>
-  <BlogForm handleBlogCreate={handleBlogCreate} blogInput={blogInput} setBlogInput={setBlogInput} />
+  <Toggleable buttonLabel="new blog" ref={blogFormRef}>
+    <BlogForm handleBlogCreate={handleBlogCreate} blogInput={blogInput} setBlogInput={setBlogInput} />
+  </Toggleable>
   <BlogDisplay blogs={blogs} />
   </>
 )
