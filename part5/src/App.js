@@ -100,12 +100,34 @@ const App = () => {
       })
   }
 
+  const handleRemove = id => {
+    const blogToRemove = blogs.find(blog => blog.id === id)
+
+    if (window.confirm(`remove blog ${blogToRemove.title} by ${blogToRemove.author}`)) {
+      blogService
+        .remove(id)
+        .then(response => {
+          setBlogs(blogs.filter(blog => blog.id !== id))
+          setNotification({ text: `blog ${blogToRemove.title} by ${blogToRemove.author} removed`, style: 'success' })
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        }).catch(error => {
+          setNotification({ text: `error: ${error.response.data.error}`, style: 'error' })
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
+        }
+        )
+    }
+  }
+
   return (
     <div>
       {user ?
         <Display.LoggedInDisplay notification={notification} user={user}
           handleBlogCreate={handleBlogCreate} logOutButton={logOutButton}
-          blogs={blogs} blogFormRef={blogFormRef} handleLike={handleLike}/> :
+          blogs={blogs} blogFormRef={blogFormRef} handleLike={handleLike} handleRemove={handleRemove} /> :
         <Display.LoggedOutDisplay notification={notification} handleLogin={handleLogin}
           username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       }
