@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import Notification from './components/notification'
+import Display from './components/Display'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -10,7 +9,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [blogInput, setBlogInput] = useState({ title: '', author: '', url: '' })
-  const [notification , setNotification] = useState(null)
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -81,69 +80,14 @@ const App = () => {
       })
   }
 
-  const loginForm = () => (
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          username <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)} />
-        </div>
-        <div>
-          password <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)} />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </>
-  )
-
-  const blogForm = () => (
-    <>
-      <h2>create new</h2>
-      <form onSubmit={handleBlogCreate}>
-        <div>
-          title: <input type="text" value={blogInput.title} name="title" onChange={({ target }) => setBlogInput({ ...blogInput, title: target.value })} />
-        </div>
-        <div>
-          author: <input type="text" value={blogInput.author} name="author" onChange={({ target }) => setBlogInput({ ...blogInput, author: target.value })} />
-        </div>
-        <div>
-          url: <input type="text" value={blogInput.url} name="url" onChange={({ target }) => setBlogInput({ ...blogInput, url: target.value })} />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </>
-  )
-
-  const blogDisplay = () => (
-    <>
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-    </>
-  )
-
-  const LoggedInDisplay = () => (
-    <>
-    <h2>blogs</h2>
-    <Notification message={notification} />
-    <p>{user.name} logged in {logOutButton()}</p>
-    {blogForm()}
-    {blogDisplay()}
-    </>
-  )
-
-  const LoggedOutDisplay = () => (
-    <>
-    <h2>log in to application</h2>
-    <Notification message={notification} />
-    {loginForm()}
-    </>
-  )
-
   return (
     <div>
       {user ?
-        LoggedInDisplay() :
-        LoggedOutDisplay()
+        <Display.LoggedInDisplay notification={notification} user={user}
+          handleBlogCreate={handleBlogCreate} blogInput={blogInput}
+          setBlogInput={setBlogInput} logOutButton={logOutButton} blogs={blogs} /> :
+        <Display.LoggedOutDisplay notification={notification} handleLogin={handleLogin}
+          username={username} password={password} setUsername={setUsername} setPassword={setPassword} />
       }
     </div>
   )
