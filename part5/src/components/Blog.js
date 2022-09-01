@@ -31,12 +31,6 @@ const Blog = ({ blog, handleLike, handleRemove }) => {
         {blog.title} {blog.author} <button onClick={toggleVisibility}>view</button>
       </div>
     )
-
-    // return (
-    //   <div style={blogStyle}>
-    //     {blog.title} {blog.author}
-    //   </div>
-    // )
   }
 }
 
