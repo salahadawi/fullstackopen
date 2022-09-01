@@ -44,5 +44,18 @@ describe('<Blog />', () => {
     expect(screen.getByText(blog.user.name, { exact: false })).toBeInTheDocument()
   })
 
+  test('clicking like twice calls event handler twice', async () => {
+    const mockHandler = jest.fn()
+
+    render(<Blog blog={blog} handleLike={mockHandler} handleRemove={mockHandler}/>)
+
+    const user = userEvent.setup()
+    await user.click(screen.getByText('view'))
+    const button = screen.getByText('like')
+    await user.click(button)
+    await user.click(button)
+
+    expect(mockHandler.mock.calls.length).toBe(2)
+  })
 
 })
