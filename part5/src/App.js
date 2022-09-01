@@ -59,18 +59,11 @@ const App = () => {
     <button onClick={handleLogout}>logout</button>
   )
 
-  const handleBlogCreate = (event) => {
-    event.preventDefault()
-
-    const blogObject = {
-      title: event.target.title.value,
-      author: event.target.author.value,
-      url: event.target.url.value,
-    }
-
+  const handleBlogCreate = blogObject => {
     blogService
       .create(blogObject)
       .then(returnedBlog => {
+        returnedBlog.user = user
         setBlogs(blogs.concat(returnedBlog))
         setNotification({ text: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, style: 'success' })
         setTimeout(() => {
@@ -90,7 +83,6 @@ const App = () => {
     blogService
       .update(id, likedBlog)
       .then(returnedBlog => {
-        console.log(returnedBlog)
         setBlogs(blogs.map(blog => blog.id !== id ? blog : returnedBlog))
       }).catch(error => {
         setNotification({ text: `error: ${error.response.data.error}`, style: 'error' })
