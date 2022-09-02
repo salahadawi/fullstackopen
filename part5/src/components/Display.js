@@ -5,14 +5,14 @@ import BlogForm from './BlogForm'
 import Toggleable from './Toggleable'
 
 const BlogDisplay = ({ blogs, handleLike, handleRemove }) => (
-  <>
+  <div id="blogdisplay">
     {blogs.sort(function (a, b) {
       return b.likes - a.likes
     }
     ).map(blog =>
       <Blog key={blog.id} blog={blog} handleLike={() => handleLike(blog.id)} handleRemove={() => handleRemove(blog.id)} />
     )}
-  </>
+  </div>
 )
 
 const LoggedInDisplay = ({ notification, user, handleBlogCreate, logOutButton, blogs, blogFormRef, handleLike, handleRemove }) => (
