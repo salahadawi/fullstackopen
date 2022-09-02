@@ -70,6 +70,38 @@ describe('Blog app', function () {
         cy.get('#blogdisplay').should('not.contain', 'a test blog')
       })
     })
+
+    describe('and multiple blogs exist', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: '1 like',
+          author: 'test author',
+          url: 'test url',
+          likes: 1
+        })
+        cy.createBlog({
+          title: '3 likes',
+          author: 'test author',
+          url: 'test url',
+          likes: 3
+        })
+        cy.createBlog({
+          title: '2 likes',
+          author: 'test author',
+          url: 'test url',
+          likes: 2
+        })
+      })
+
+      it('blogs are ordered by likes', function () {
+        cy.get('#blogdisplay').then(blogs => {
+          cy.wrap(blogs[0]).contains('3 likes')
+          cy.wrap(blogs[1]).contains('2 likes')
+          cy.wrap(blogs[2]).contains('1 like')
+        })
+      })
+
+    })
   })
 
   describe('blogs by other users', function () {
