@@ -5,12 +5,11 @@ import Filter from './components/Filter'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { initializeAnecdotes } from './reducers/anecdoteReducer'
-import anecdoteService from './services/anecdotes'
 
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    anecdoteService.getAll().then(anecdotes => dispatch(initializeAnecdotes(anecdotes)))
+   dispatch(initializeAnecdotes())
   }, [dispatch])
 
   return (
