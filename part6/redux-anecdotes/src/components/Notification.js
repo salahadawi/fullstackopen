@@ -6,11 +6,12 @@ const Notification = ({ notification }) => {
     padding: 10,
     borderWidth: 1
   }
-  if (notification === '')
+  if (notification.text === '')
     return
+    console.log('notification', notification)
   return (
     <div style={style}>
-      {notification}
+      {notification.text}
     </div>
   )
 }
