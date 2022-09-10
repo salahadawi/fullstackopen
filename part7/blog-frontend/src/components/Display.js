@@ -1,8 +1,8 @@
-import Blog from "./Blog"
-import LoginForm from "./LoginForm"
-import Notification from "./Notification"
-import BlogForm from "./BlogForm"
-import Toggleable from "./Toggleable"
+import Blog from './Blog'
+import LoginForm from './LoginForm'
+import Notification from './Notification'
+import BlogForm from './BlogForm'
+import Toggleable from './Toggleable'
 
 const BlogDisplay = ({ blogs, handleLike, handleRemove }) => (
   <div id="blogdisplay">
@@ -22,7 +22,6 @@ const BlogDisplay = ({ blogs, handleLike, handleRemove }) => (
 )
 
 const LoggedInDisplay = ({
-  notification,
   user,
   handleBlogCreate,
   logOutButton,
@@ -33,7 +32,7 @@ const LoggedInDisplay = ({
 }) => (
   <>
     <h2>blogs</h2>
-    <Notification message={notification} />
+    <Notification />
     <p>
       {user.name} logged in {logOutButton()}
     </p>
@@ -49,7 +48,6 @@ const LoggedInDisplay = ({
 )
 
 const LoggedOutDisplay = ({
-  notification,
   handleLogin,
   username,
   password,
@@ -58,7 +56,7 @@ const LoggedOutDisplay = ({
 }) => (
   <>
     <h2>log in to application</h2>
-    <Notification message={notification} />
+    <Notification />
     <LoginForm
       handleLogin={handleLogin}
       username={username}

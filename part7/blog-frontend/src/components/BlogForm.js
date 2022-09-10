@@ -1,10 +1,10 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 const BlogForm = ({ handleBlogCreate }) => {
   const [blogInput, setBlogInput] = useState({
-    title: "",
-    author: "",
-    url: "",
+    title: '',
+    author: '',
+    url: '',
   })
 
   const addBlog = (event) => {
@@ -17,7 +17,7 @@ const BlogForm = ({ handleBlogCreate }) => {
       <h2>create new</h2>
       <form onSubmit={addBlog}>
         <div>
-          title:{" "}
+          title:{' '}
           <input
             id="title"
             placeholder="title"
@@ -30,7 +30,7 @@ const BlogForm = ({ handleBlogCreate }) => {
           />
         </div>
         <div>
-          author:{" "}
+          author:{' '}
           <input
             id="author"
             placeholder="author"
@@ -43,7 +43,7 @@ const BlogForm = ({ handleBlogCreate }) => {
           />
         </div>
         <div>
-          url:{" "}
+          url:{' '}
           <input
             id="url"
             placeholder="url"

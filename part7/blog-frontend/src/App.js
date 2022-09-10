@@ -2,14 +2,16 @@ import { useState, useEffect, useRef } from 'react'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Display from './components/Display'
+import { setNotificationWithTimeout } from './reducers/notificationReducer'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
@@ -40,10 +42,7 @@ const App = () => {
       setPassword('')
     } catch (exception) {
       console.log(exception)
-      setNotification({ text: 'Wrong username or password', style: 'error' })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(setNotificationWithTimeout('Wrong username or password'))
     }
   }
 
@@ -58,13 +57,12 @@ const App = () => {
     blogService.create(blogObject).then((returnedBlog) => {
       returnedBlog.user = user
       setBlogs(blogs.concat(returnedBlog))
-      setNotification({
-        text: `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
-        style: 'success',
-      })
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      dispatch(
+        setNotificationWithTimeout(
+          `a new blog ${returnedBlog.title} by ${returnedBlog.author} added`,
+          'success'
+        )
+      )
     })
     blogFormRef.current.toggleVisibility()
   }
@@ -82,13 +80,9 @@ const App = () => {
         setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
       })
       .catch((error) => {
-        setNotification({
-          text: `error: ${error.response.data.error}`,
-          style: 'error',
-        })
-        setTimeout(() => {
-          setNotification(null)
-        }, 5000)
+        dispatch(
+          setNotificationWithTimeout(`error: ${error.response.data.error}`)
+        )
       })
   }
 
@@ -104,22 +98,17 @@ const App = () => {
         .remove(id)
         .then(() => {
           setBlogs(blogs.filter((blog) => blog.id !== id))
-          setNotification({
-            text: `blog ${blogToRemove.title} by ${blogToRemove.author} removed`,
-            style: 'success',
-          })
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
+          dispatch(
+            setNotificationWithTimeout(
+              `blog ${blogToRemove.title} by ${blogToRemove.author} removed`,
+              'success'
+            )
+          )
         })
         .catch((error) => {
-          setNotification({
-            text: `error: ${error.response.data.error}`,
-            style: 'error',
-          })
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
+          dispatch(
+            setNotificationWithTimeout(`error: ${error.response.data.error}`)
+          )
         })
     }
   }
@@ -128,7 +117,6 @@ const App = () => {
     <div>
       {user ? (
         <Display.LoggedInDisplay
-          notification={notification}
           user={user}
           handleBlogCreate={handleBlogCreate}
           logOutButton={logOutButton}
@@ -139,7 +127,6 @@ const App = () => {
         />
       ) : (
         <Display.LoggedOutDisplay
-          notification={notification}
           handleLogin={handleLogin}
           username={username}
           password={password}

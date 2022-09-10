@@ -1,23 +1,23 @@
-import React from "react"
-import "@testing-library/jest-dom/extend-expect"
-import { render, screen } from "@testing-library/react"
-import Blog from "./Blog"
-import userEvent from "@testing-library/user-event"
+import React from 'react'
+import '@testing-library/jest-dom/extend-expect'
+import { render, screen } from '@testing-library/react'
+import Blog from './Blog'
+import userEvent from '@testing-library/user-event'
 
 const blog = {
-  title: "Test blog",
-  author: "Test author",
-  url: "url.com",
+  title: 'Test blog',
+  author: 'Test author',
+  url: 'url.com',
   likes: 0,
   user: {
-    name: "Test user",
-    username: "testuser",
-    id: "5e8f8f8f8f8f8f8f8f8f8f8f",
+    name: 'Test user',
+    username: 'testuser',
+    id: '5e8f8f8f8f8f8f8f8f8f8f8f',
   },
 }
 
-describe("<Blog />", () => {
-  test("renders content", () => {
+describe('<Blog />', () => {
+  test('renders content', () => {
     const mockHandler = jest.fn()
 
     render(
@@ -37,7 +37,7 @@ describe("<Blog />", () => {
     ).not.toBeInTheDocument()
   })
 
-  test("clicking the button displays url and likes", async () => {
+  test('clicking the button displays url and likes', async () => {
     const mockHandler = jest.fn()
 
     render(
@@ -45,7 +45,7 @@ describe("<Blog />", () => {
     )
 
     const user = userEvent.setup()
-    const button = screen.getByText("view")
+    const button = screen.getByText('view')
     await user.click(button)
 
     expect(screen.queryByText(blog.title, { exact: false })).toBeInTheDocument()
@@ -58,7 +58,7 @@ describe("<Blog />", () => {
     ).toBeInTheDocument()
   })
 
-  test("clicking like twice calls event handler twice", async () => {
+  test('clicking like twice calls event handler twice', async () => {
     const mockHandler = jest.fn()
 
     render(
@@ -66,8 +66,8 @@ describe("<Blog />", () => {
     )
 
     const user = userEvent.setup()
-    await user.click(screen.getByText("view"))
-    const button = screen.getByText("like")
+    await user.click(screen.getByText('view'))
+    const button = screen.getByText('like')
     await user.click(button)
     await user.click(button)
 
