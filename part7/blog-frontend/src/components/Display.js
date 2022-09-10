@@ -3,14 +3,50 @@ import LoginForm from './LoginForm'
 import Notification from './Notification'
 import BlogForm from './BlogForm'
 import Toggleable from './Toggleable'
+import { useSelector, useDispatch } from 'react-redux'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { setNotificationWithTimeout } from '../reducers/notificationReducer'
 
-const BlogDisplay = ({ blogs, handleLike, handleRemove }) => (
-  <div id="blogdisplay">
-    {blogs
-      .sort(function (a, b) {
-        return b.likes - a.likes
-      })
-      .map((blog) => (
+const BlogDisplay = () => {
+  const dispatch = useDispatch()
+  const blogs = useSelector((state) => state.blogs)
+
+  const handleLike = (id) => {
+    dispatch(likeBlog(id)).catch((error) => {
+      dispatch(
+        setNotificationWithTimeout(`error: ${error.response.data.error}`)
+      )
+    })
+  }
+
+  const handleRemove = async (id) => {
+    const blogToRemove = blogs.find((blog) => blog.id === id)
+    if (
+      window.confirm(
+        `remove blog ${blogToRemove.title} by ${blogToRemove.author}`
+      )
+    ) {
+      dispatch(removeBlog(id))
+        .then(() => {
+          dispatch(
+            setNotificationWithTimeout(
+              `blog ${blogToRemove.title} by ${blogToRemove.author} removed`,
+              'success'
+            )
+          )
+        })
+        .catch((error) => {
+          dispatch(
+            setNotificationWithTimeout(`error: ${error.response.data.error}`)
+          )
+        })
+    }
+  }
+
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
+  return (
+    <div id="blogdisplay">
+      {sortedBlogs.map((blog) => (
         <Blog
           key={blog.id}
           blog={blog}
@@ -18,18 +54,11 @@ const BlogDisplay = ({ blogs, handleLike, handleRemove }) => (
           handleRemove={() => handleRemove(blog.id)}
         />
       ))}
-  </div>
-)
+    </div>
+  )
+}
 
-const LoggedInDisplay = ({
-  user,
-  handleBlogCreate,
-  logOutButton,
-  blogs,
-  blogFormRef,
-  handleLike,
-  handleRemove,
-}) => (
+const LoggedInDisplay = ({ user, logOutButton, blogFormRef }) => (
   <>
     <h2>blogs</h2>
     <Notification />
@@ -37,13 +66,9 @@ const LoggedInDisplay = ({
       {user.name} logged in {logOutButton()}
     </p>
     <Toggleable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm handleBlogCreate={handleBlogCreate} />
+      <BlogForm />
     </Toggleable>
-    <BlogDisplay
-      blogs={blogs}
-      handleLike={handleLike}
-      handleRemove={handleRemove}
-    />
+    <BlogDisplay />
   </>
 )
 
