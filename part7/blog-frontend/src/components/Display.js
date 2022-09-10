@@ -6,6 +6,7 @@ import Toggleable from './Toggleable'
 import { useSelector, useDispatch } from 'react-redux'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotificationWithTimeout } from '../reducers/notificationReducer'
+import { clearUser } from '../reducers/userReducer'
 
 const BlogDisplay = () => {
   const dispatch = useDispatch()
@@ -58,37 +59,35 @@ const BlogDisplay = () => {
   )
 }
 
-const LoggedInDisplay = ({ user, logOutButton, blogFormRef }) => (
-  <>
-    <h2>blogs</h2>
-    <Notification />
-    <p>
-      {user.name} logged in {logOutButton()}
-    </p>
-    <Toggleable buttonLabel="new blog" ref={blogFormRef}>
-      <BlogForm />
-    </Toggleable>
-    <BlogDisplay />
-  </>
-)
+const LoggedInDisplay = ({ blogFormRef }) => {
+  const dispatch = useDispatch()
+  const handleLogout = () => {
+    dispatch(clearUser())
+  }
 
-const LoggedOutDisplay = ({
-  handleLogin,
-  username,
-  password,
-  setUsername,
-  setPassword,
-}) => (
+  const logOutButton = () => <button onClick={handleLogout}>logout</button>
+
+  const user = useSelector((state) => state.user)
+  return (
+    <>
+      <h2>blogs</h2>
+      <Notification />
+      <p>
+        {user.name} logged in {logOutButton()}
+      </p>
+      <Toggleable buttonLabel="new blog" ref={blogFormRef}>
+        <BlogForm />
+      </Toggleable>
+      <BlogDisplay />
+    </>
+  )
+}
+
+const LoggedOutDisplay = () => (
   <>
     <h2>log in to application</h2>
     <Notification />
-    <LoginForm
-      handleLogin={handleLogin}
-      username={username}
-      password={password}
-      setUsername={setUsername}
-      setPassword={setPassword}
-    />
+    <LoginForm />
   </>
 )
 
