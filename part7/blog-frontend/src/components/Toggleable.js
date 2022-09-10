@@ -1,34 +1,30 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector, useDispatch } from 'react-redux'
+import { toggleVisibility } from '../reducers/blogFormReducer'
 
-const Toggleable = forwardRef(({ children, buttonLabel }, refs) => {
-  const [visible, setVisible] = useState(false)
-
-  const toggleVisibility = () => {
-    setVisible(!visible)
-  }
-
-  useImperativeHandle(refs, () => {
-    return {
-      toggleVisibility,
-    }
-  })
+const Toggleable = ({ children, buttonLabel }) => {
+  const dispatch = useDispatch()
+  const visible = useSelector((state) => state.blogForm)
 
   if (visible) {
     return (
       <>
         {children}
-        <button onClick={toggleVisibility}>cancel</button>
+        <button onClick={() => dispatch(toggleVisibility(visible))}>
+          cancel
+        </button>
       </>
     )
   } else {
     return (
       <>
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <button onClick={() => dispatch(toggleVisibility(visible))}>
+          {buttonLabel}
+        </button>
       </>
     )
   }
-})
+}
 
 Toggleable.displayName = 'Toggleable'
 

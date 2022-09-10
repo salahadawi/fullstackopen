@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Display from './components/Display'
 import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
@@ -6,7 +6,6 @@ import { initializeUser } from './reducers/userReducer'
 import { useSelector } from 'react-redux'
 
 const App = () => {
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
 
@@ -20,11 +19,7 @@ const App = () => {
 
   return (
     <div>
-      {user ? (
-        <Display.LoggedInDisplay blogFormRef={blogFormRef} />
-      ) : (
-        <Display.LoggedOutDisplay />
-      )}
+      {user ? <Display.LoggedInDisplay /> : <Display.LoggedOutDisplay />}
     </div>
   )
 }

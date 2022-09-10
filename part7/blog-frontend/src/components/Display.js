@@ -59,7 +59,7 @@ const BlogDisplay = () => {
   )
 }
 
-const LoggedInDisplay = ({ blogFormRef }) => {
+const LoggedInDisplay = () => {
   const dispatch = useDispatch()
   const handleLogout = () => {
     dispatch(clearUser())
@@ -75,7 +75,7 @@ const LoggedInDisplay = ({ blogFormRef }) => {
       <p>
         {user.name} logged in {logOutButton()}
       </p>
-      <Toggleable buttonLabel="new blog" ref={blogFormRef}>
+      <Toggleable buttonLabel="new blog">
         <BlogForm />
       </Toggleable>
       <BlogDisplay />
