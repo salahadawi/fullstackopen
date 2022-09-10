@@ -1,11 +1,6 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import {
-  render,
-  screen,
-  waitForElement,
-  waitForElementToBeRemoved,
-} from '@testing-library/react'
+import { screen, waitForElementToBeRemoved } from '@testing-library/react'
 
 import Notification from './Notification'
 import { renderWithProviders } from '../tests/test_utils'
