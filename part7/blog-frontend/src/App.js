@@ -4,6 +4,7 @@ import { Routes, Route } from 'react-router-dom'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 import Display from './components/Display'
 import Users from './components/Users'
@@ -20,6 +21,10 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeUser())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
   }, [dispatch])
 
   if (!user) return <Display.LoggedOutDisplay />
