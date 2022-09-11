@@ -3,6 +3,7 @@ import notificationReducer from './reducers/notificationReducer'
 import blogReducer from './reducers/blogReducer'
 import userReducer from './reducers/userReducer'
 import blogFormReducer from './reducers/blogFormReducer'
+import usersReducer from './reducers/usersReducer'
 
 export const setupStore = (preloadedState) => {
   return configureStore({
@@ -11,6 +12,7 @@ export const setupStore = (preloadedState) => {
       blogs: blogReducer,
       user: userReducer,
       blogForm: blogFormReducer,
+      users: usersReducer,
     },
     preloadedState,
   })

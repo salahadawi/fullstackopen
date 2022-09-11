@@ -6,7 +6,6 @@ import Toggleable from './Toggleable'
 import { useSelector, useDispatch } from 'react-redux'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotificationWithTimeout } from '../reducers/notificationReducer'
-import { clearUser } from '../reducers/userReducer'
 
 const BlogDisplay = () => {
   const dispatch = useDispatch()
@@ -60,21 +59,8 @@ const BlogDisplay = () => {
 }
 
 const LoggedInDisplay = () => {
-  const dispatch = useDispatch()
-  const handleLogout = () => {
-    dispatch(clearUser())
-  }
-
-  const logOutButton = () => <button onClick={handleLogout}>logout</button>
-
-  const user = useSelector((state) => state.user)
   return (
     <>
-      <h2>blogs</h2>
-      <Notification />
-      <p>
-        {user.name} logged in {logOutButton()}
-      </p>
       <Toggleable buttonLabel="new blog">
         <BlogForm />
       </Toggleable>
