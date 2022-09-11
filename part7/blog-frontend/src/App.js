@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Routes, Route, useMatch } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 
 import { initializeBlogs } from './reducers/blogReducer'
 import { initializeUser } from './reducers/userReducer'
@@ -28,12 +28,6 @@ const App = () => {
     dispatch(initializeUsers())
   }, [dispatch])
 
-  const match = useMatch('/users/:id')
-  const users = useSelector((state) => state.users)
-  const userToDisplay = match
-    ? users.find((user) => user.id === match.params.id)
-    : null
-
   if (!user) return <Display.LoggedOutDisplay />
   return (
     <div>
@@ -46,7 +40,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Display.LoggedInDisplay />} />
         <Route path="/users" element={<Users />} />
-        <Route path="/users/:id" element={<User user={userToDisplay} />} />
+        <Route path="/users/:id" element={<User />} />
       </Routes>
     </div>
   )
