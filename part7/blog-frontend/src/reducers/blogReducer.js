@@ -65,4 +65,19 @@ export const removeBlog = (id) => {
   }
 }
 
+export const createComment = (blog, comment) => {
+  return async (dispatch) => {
+    await blogService.createComment(blog.id, comment).catch((error) => {
+      dispatch(
+        setNotificationWithTimeout(`error: ${error.response.data.error}`)
+      )
+    })
+    const updatedBlog = {
+      ...blog,
+      comments: blog.comments.concat(comment),
+    }
+    dispatch(updateBlog(updatedBlog))
+  }
+}
+
 export default blogSlice.reducer

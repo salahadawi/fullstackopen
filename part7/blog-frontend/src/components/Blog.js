@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotificationWithTimeout } from '../reducers/notificationReducer'
 
+import CommentForm from './CommentForm'
+
 const Blog = () => {
   const dispatch = useDispatch()
   const id = useParams().id
@@ -56,10 +58,10 @@ const Blog = () => {
       {blog.user ? <div>added by {blog.user.name}</div> : null}
       <button onClick={() => handleRemove(blog.id)}>remove</button>
       <h3>comments</h3>
+      <CommentForm blog={blog} />
       <ul>
-        {blog.comments.map((comment, index) => (
-          <li key={index}>{comment}</li>
-        ))}
+        {blog.comments &&
+          blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}
       </ul>
     </div>
   )
