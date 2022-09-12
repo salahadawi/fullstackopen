@@ -58,16 +58,9 @@ describe('Blog app', function () {
         })
       })
 
-      it('a blog can be liked', function () {
-        cy.contains('view').click()
-        cy.contains('like').click()
-        cy.contains('1 likes')
-      })
-
-      it('a blog can be removed', function () {
-        cy.contains('view').click()
-        cy.contains('remove').click()
-        cy.get('#blogdisplay').should('not.contain', 'a test blog')
+      it('a blog is visible', function () {
+        cy.contains('a test blog')
+        cy.contains('a test author')
       })
     })
 
@@ -101,32 +94,60 @@ describe('Blog app', function () {
         })
       })
     })
-  })
 
-  describe('blogs by other users', function () {
-    beforeEach(function () {
-      cy.request('POST', 'http://localhost:3003/api/users/', {
-        username: 'testuser2',
-        name: 'Test User 2',
-        password: 'salainen',
+    describe('blog view', function () {
+      beforeEach(function () {
+        cy.createBlog({
+          title: 'a test blog',
+          author: 'a test author',
+          url: 'a test url',
+        })
+
+        cy.contains('a test blog').click()
       })
-      cy.login({ username: 'testuser2', password: 'salainen' })
-      cy.createBlog({
-        title: 'a test blog 2',
-        author: 'a test author 2',
-        url: 'a test url 2',
+
+      it('a blog can be liked', function () {
+        cy.contains('like').click()
+        cy.contains('1 likes')
       })
-      cy.login({ username: 'testuser', password: 'salainen' })
+
+      it('a blog can be removed', function () {
+        cy.clock(new Date())
+        cy.contains('remove').click()
+
+        cy.get('#notification').contains(
+          'blog a test blog by a test author removed'
+        )
+        cy.tick(6000)
+        cy.contains('a test blog').should('not.exist')
+      })
     })
 
-    it('a blog created by other user can not be removed', function () {
-      cy.contains('view').click()
-      cy.contains('remove').click()
-      cy.get('#blogdisplay').should('contain', 'a test blog 2')
-      cy.get('.error')
-        .should('contain', 'error: only the creator of a blog can delete it')
-        .and('have.css', 'color', 'rgb(255, 0, 0)')
-        .and('have.css', 'border-style', 'solid')
+    describe.only('blogs by other users', function () {
+      beforeEach(function () {
+        cy.request('POST', 'http://localhost:3003/api/users/', {
+          username: 'testuser2',
+          name: 'Test User 2',
+          password: 'salainen',
+        })
+        cy.login({ username: 'testuser2', password: 'salainen' })
+        cy.createBlog({
+          title: 'a test blog 2',
+          author: 'a test author 2',
+          url: 'a test url 2',
+        })
+        cy.login({ username: 'testuser', password: 'salainen' })
+        cy.contains('a test blog 2').click()
+      })
+
+      it('a blog created by other user can not be removed', function () {
+        cy.contains('remove').click()
+        cy.get('#notification')
+          .should('contain', 'error: only the creator of a blog can delete it')
+          .and('have.css', 'color', 'rgb(255, 0, 0)')
+          .and('have.css', 'border-style', 'solid')
+        cy.contains('a test blog 2')
+      })
     })
   })
 })

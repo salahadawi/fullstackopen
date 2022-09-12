@@ -1,58 +1,30 @@
-import Blog from './Blog'
 import LoginForm from './LoginForm'
 import Notification from './Notification'
 import BlogForm from './BlogForm'
 import Toggleable from './Toggleable'
-import { useSelector, useDispatch } from 'react-redux'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
-import { setNotificationWithTimeout } from '../reducers/notificationReducer'
+import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const BlogDisplay = () => {
-  const dispatch = useDispatch()
   const blogs = useSelector((state) => state.blogs)
 
-  const handleLike = (id) => {
-    dispatch(likeBlog(id)).catch((error) => {
-      dispatch(
-        setNotificationWithTimeout(`error: ${error.response.data.error}`)
-      )
-    })
-  }
-
-  const handleRemove = async (id) => {
-    const blogToRemove = blogs.find((blog) => blog.id === id)
-    if (
-      window.confirm(
-        `remove blog ${blogToRemove.title} by ${blogToRemove.author}`
-      )
-    ) {
-      dispatch(removeBlog(id))
-        .then(() => {
-          dispatch(
-            setNotificationWithTimeout(
-              `blog ${blogToRemove.title} by ${blogToRemove.author} removed`,
-              'success'
-            )
-          )
-        })
-        .catch((error) => {
-          dispatch(
-            setNotificationWithTimeout(`error: ${error.response.data.error}`)
-          )
-        })
-    }
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5,
   }
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
   return (
     <div id="blogdisplay">
       {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          blog={blog}
-          handleLike={() => handleLike(blog.id)}
-          handleRemove={() => handleRemove(blog.id)}
-        />
+        <div key={blog.id} style={blogStyle}>
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>
+        </div>
       ))}
     </div>
   )

@@ -5,7 +5,11 @@ const Notification = () => {
   if (notification.text === '') {
     return null
   }
-  return <div className={notification.style}>{notification.text}</div>
+  return (
+    <div id="notification" className={notification.style}>
+      {notification.text}
+    </div>
+  )
 }
 
 export default Notification

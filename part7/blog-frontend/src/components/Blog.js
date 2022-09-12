@@ -1,47 +1,62 @@
-import { useState } from 'react'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-const Blog = ({ blog, handleLike, handleRemove }) => {
-  const [visible, setVisible] = useState(false)
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { setNotificationWithTimeout } from '../reducers/notificationReducer'
+
+const Blog = () => {
+  const dispatch = useDispatch()
+  const id = useParams().id
+  const blogs = useSelector((state) => state.blogs)
+  const blog = blogs.find((b) => b.id === id)
+
+  const handleLike = (id) => {
+    dispatch(likeBlog(id)).catch((error) => {
+      dispatch(
+        setNotificationWithTimeout(`error: ${error.response.data.error}`)
+      )
+    })
   }
 
-  const toggleVisibility = () => {
-    setVisible(!visible)
+  const handleRemove = async (id) => {
+    const blogToRemove = blogs.find((blog) => blog.id === id)
+    if (
+      window.confirm(
+        `remove blog ${blogToRemove.title} by ${blogToRemove.author}`
+      )
+    ) {
+      dispatch(removeBlog(id))
+        .then(() => {
+          dispatch(
+            setNotificationWithTimeout(
+              `blog ${blogToRemove.title} by ${blogToRemove.author} removed`,
+              'success'
+            )
+          )
+        })
+        .catch((error) => {
+          dispatch(
+            setNotificationWithTimeout(`error: ${error.response.data.error}`)
+          )
+        })
+    }
   }
 
-  if (visible) {
-    return (
-      <div style={blogStyle}>
-        {blog.title} {blog.author}{' '}
-        <button onClick={toggleVisibility}>hide</button>
-        <div>{blog.url}</div>
-        <div>
-          {blog.likes} likes <button onClick={handleLike}>like</button>
-        </div>
-        {blog.user ? <div>added by {blog.user.name}</div> : null}
-        <button onClick={handleRemove}>remove</button>
-      </div>
-    )
-  } else {
-    return (
-      <div style={blogStyle}>
-        {blog.title} {blog.author}{' '}
-        <button onClick={toggleVisibility}>view</button>
-      </div>
-    )
-  }
-}
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
+  if (!blog) return null
+  return (
+    <div>
+      <h2>
+        {blog.title} {blog.author}
+      </h2>
+      <a href={blog.url}>{blog.url}</a>
+      <p>
+        {blog.likes} likes{' '}
+        <button onClick={() => handleLike(blog.id)}>like</button>
+      </p>
+      {blog.user ? <div>added by {blog.user.name}</div> : null}
+      <button onClick={() => handleRemove(blog.id)}>remove</button>
+    </div>
+  )
 }
 
 export default Blog

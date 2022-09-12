@@ -1,14 +1,17 @@
 import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import Blog from './Blog'
 import userEvent from '@testing-library/user-event'
+import { renderWithProviders } from '../tests/test_utils'
+import { MemoryRouter, Route, Routes } from 'react-router-dom'
 
 const blog = {
   title: 'Test blog',
   author: 'Test author',
   url: 'url.com',
   likes: 0,
+  id: '1',
   user: {
     name: 'Test user',
     username: 'testuser',
@@ -16,61 +19,32 @@ const blog = {
   },
 }
 
+const RenderWithRouter = ({ children }) => (
+  <MemoryRouter initialEntries={['/blogs/1']}>
+    <Routes>
+      <Route path="/blogs/:id" element={children} />
+    </Routes>
+  </MemoryRouter>
+)
+
 describe('<Blog />', () => {
-  test('renders content', () => {
-    const mockHandler = jest.fn()
-
-    render(
-      <Blog blog={blog} handleLike={mockHandler} handleRemove={mockHandler} />
+  beforeEach(() => {
+    renderWithProviders(
+      <RenderWithRouter>
+        <Blog />
+      </RenderWithRouter>,
+      { preloadedState: { blogs: [blog] } }
     )
-
+  })
+  test('renders content', () => {
     expect(screen.getByText(blog.title, { exact: false })).toBeInTheDocument()
     expect(screen.getByText(blog.author, { exact: false })).toBeInTheDocument()
-    expect(
-      screen.queryByText(blog.url, { exact: false })
-    ).not.toBeInTheDocument()
+    expect(screen.queryByText(blog.url, { exact: false })).toBeInTheDocument()
     expect(
       screen.queryByText(`${blog.likes} likes`, { exact: false })
-    ).not.toBeInTheDocument()
+    ).toBeInTheDocument()
     expect(
       screen.queryByText(blog.user.name, { exact: false })
-    ).not.toBeInTheDocument()
-  })
-
-  test('clicking the button displays url and likes', async () => {
-    const mockHandler = jest.fn()
-
-    render(
-      <Blog blog={blog} handleLike={mockHandler} handleRemove={mockHandler} />
-    )
-
-    const user = userEvent.setup()
-    const button = screen.getByText('view')
-    await user.click(button)
-
-    expect(screen.queryByText(blog.title, { exact: false })).toBeInTheDocument()
-    expect(screen.getByText(blog.url, { exact: false })).toBeInTheDocument()
-    expect(
-      screen.getByText(`${blog.likes} likes`, { exact: false })
     ).toBeInTheDocument()
-    expect(
-      screen.getByText(blog.user.name, { exact: false })
-    ).toBeInTheDocument()
-  })
-
-  test('clicking like twice calls event handler twice', async () => {
-    const mockHandler = jest.fn()
-
-    render(
-      <Blog blog={blog} handleLike={mockHandler} handleRemove={mockHandler} />
-    )
-
-    const user = userEvent.setup()
-    await user.click(screen.getByText('view'))
-    const button = screen.getByText('like')
-    await user.click(button)
-    await user.click(button)
-
-    expect(mockHandler.mock.calls.length).toBe(2)
   })
 })
