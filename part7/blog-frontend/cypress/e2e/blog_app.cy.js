@@ -121,9 +121,16 @@ describe('Blog app', function () {
         cy.tick(6000)
         cy.contains('a test blog').should('not.exist')
       })
+
+      it('comments can be added', function () {
+        cy.get('[type=text]').type('a test comment')
+        cy.contains('add comment').click()
+
+        cy.contains('a test comment')
+      })
     })
 
-    describe.only('blogs by other users', function () {
+    describe('blogs by other users', function () {
       beforeEach(function () {
         cy.request('POST', 'http://localhost:3003/api/users/', {
           username: 'testuser2',
