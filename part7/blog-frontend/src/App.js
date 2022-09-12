@@ -9,9 +9,9 @@ import { initializeUsers } from './reducers/usersReducer'
 import Display from './components/Display'
 import Users from './components/Users'
 import User from './components/User'
-import LogOutButton from './components/LogOut'
 import Notification from './components/Notification'
 import Blog from './components/Blog'
+import Navigation from './components/Navigation'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -32,12 +32,9 @@ const App = () => {
   if (!user) return <Display.LoggedOutDisplay />
   return (
     <div>
-      <h2>blogs</h2>
+      <Navigation />
       <Notification />
-      <p>{user.name} logged in</p>
-      <p>
-        <LogOutButton />
-      </p>
+      <h2>blog app</h2>
       <Routes>
         <Route path="/" element={<Display.LoggedInDisplay />} />
         <Route path="/users" element={<Users />} />
