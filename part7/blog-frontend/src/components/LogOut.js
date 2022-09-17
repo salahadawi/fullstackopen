@@ -1,6 +1,8 @@
 import { useDispatch } from 'react-redux'
 import { clearUser } from '../reducers/userReducer'
 
+import { Button } from '@chakra-ui/react'
+
 const logOutButton = () => {
   const dispatch = useDispatch()
 
@@ -8,7 +10,11 @@ const logOutButton = () => {
     dispatch(clearUser())
   }
 
-  return <button onClick={handleLogout}>logout</button>
+  return (
+    <Button colorScheme="teal" onClick={handleLogout}>
+      Logout
+    </Button>
+  )
 }
 
 export default logOutButton

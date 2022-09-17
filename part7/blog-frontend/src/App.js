@@ -13,6 +13,8 @@ import Notification from './components/Notification'
 import Blog from './components/Blog'
 import Navigation from './components/Navigation'
 
+import { Box } from '@chakra-ui/react'
+
 const App = () => {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
@@ -31,7 +33,7 @@ const App = () => {
 
   if (!user) return <Display.LoggedOutDisplay />
   return (
-    <div>
+    <Box>
       <Navigation />
       <Notification />
       <h2>blog app</h2>
@@ -41,7 +43,7 @@ const App = () => {
         <Route path="/users/:id" element={<User />} />
         <Route path="/blogs/:id" element={<Blog />} />
       </Routes>
-    </div>
+    </Box>
   )
 }
 

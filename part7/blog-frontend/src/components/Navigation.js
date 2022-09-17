@@ -1,34 +1,31 @@
-import { Link } from 'react-router-dom'
-import LogOutButton from './LogOut'
 import { useSelector } from 'react-redux'
+
+import LogOutButton from './LogOut'
+import NavigationButton from './NavigationButton'
+
+import { HStack, Flex } from '@chakra-ui/react'
 
 const Navigation = () => {
   const user = useSelector((state) => state.user)
-  const padding = {
-    paddingRight: 5,
-  }
-
-  const style = {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: '0 10px',
-    backgroundColor: 'lightgrey',
-    color: 'black',
-  }
 
   return (
-    <div style={style}>
-      <Link style={padding} to="/">
-        blogs
-      </Link>
-      <Link style={padding} to="/users">
-        users
-      </Link>
-      <p>
-        {user.name} logged in <LogOutButton />
-      </p>
-    </div>
+    <Flex
+      w="100%"
+      px="6"
+      py="5"
+      align="center"
+      justify="space-between"
+      color="teal"
+    >
+      <HStack as="nav" spacing="5" m="auto">
+        <NavigationButton to="/">Blogs</NavigationButton>
+        <NavigationButton to="/users">Users</NavigationButton>
+      </HStack>
+      <HStack spacing="5">
+        <p>{user.name} logged in</p>
+        <LogOutButton />
+      </HStack>
+    </Flex>
   )
 }
 
