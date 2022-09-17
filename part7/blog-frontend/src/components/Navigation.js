@@ -10,8 +10,8 @@ const Navigation = () => {
 
   return (
     <Box color="teal">
-      <Flex w="100%" px="6" py="4" align="center" justify="space-between">
-        <HStack as="nav" spacing="5" m="auto">
+      <Flex w="100%" px="6" py="4" justify="space-between">
+        <HStack as="nav" spacing="5">
           <NavigationButton to="/">Blogs</NavigationButton>
           <NavigationButton to="/users">Users</NavigationButton>
         </HStack>
