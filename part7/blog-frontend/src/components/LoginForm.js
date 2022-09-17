@@ -13,12 +13,15 @@ import {
   Button,
   Box,
   VStack,
+  InputRightElement,
+  InputGroup,
 } from '@chakra-ui/react'
 
 const LoginForm = () => {
-  // use react-hook-form ??
+  // use react-hook-form ?? https://chakra-ui.com/getting-started/with-hook-form
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [show, setShow] = useState(false)
   const dispatch = useDispatch()
 
   const handleLogin = async (event) => {
@@ -57,14 +60,21 @@ const LoginForm = () => {
             </FormControl>
             <FormControl>
               <FormLabel>Password</FormLabel>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                name="Password"
-                onChange={({ target }) => setPassword(target.value)}
-                bg="white"
-              />
+              <InputGroup>
+                <Input
+                  id="password"
+                  type={show ? 'text' : 'password'}
+                  value={password}
+                  name="Password"
+                  onChange={({ target }) => setPassword(target.value)}
+                  bg="white"
+                />
+                <InputRightElement w="4.5rem">
+                  <Button onClick={() => setShow(!show)} size="xs">
+                    {show ? 'Hide' : 'Show'}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
             </FormControl>
           </Box>
           <Button colorScheme="teal" w="100%" id="login-button" type="submit">
