@@ -1,9 +1,12 @@
 import LoginForm from './LoginForm'
 import Notification from './Notification'
-import BlogForm from './BlogForm'
-import Toggleable from './Toggleable'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+
+import BlogForm from './BlogForm'
+import Toggleable from './Toggleable'
+
+import { Center, VStack, Box, Heading } from '@chakra-ui/react'
 
 const BlogDisplay = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -42,11 +45,15 @@ const LoggedInDisplay = () => {
 }
 
 const LoggedOutDisplay = () => (
-  <>
-    <h2>log in to application</h2>
+  <Box>
     <Notification />
-    <LoginForm />
-  </>
+    <Center h="90vh">
+      <VStack bg="teal.50" px="64px" py="64px" rounded="xl" spacing="8">
+        <Heading>Log in to application</Heading>
+        <LoginForm />
+      </VStack>
+    </Center>
+  </Box>
 )
 
 const Display = { BlogDisplay, LoggedInDisplay, LoggedOutDisplay }
