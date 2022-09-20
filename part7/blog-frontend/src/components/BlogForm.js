@@ -49,20 +49,7 @@ const Form = ({ initialFocusRef, onClose }) => {
 
   const addBlog = (event) => {
     event.preventDefault()
-
-    // temporary for testing css
-    const tmpBlog = {
-      title: 'The Title of the blog',
-      author: 'The Author of the blog',
-      url: 'urloftheblog.com',
-    }
-
-    console.log('blogInput', blogInput)
-    dispatch(createBlog(tmpBlog))
-    dispatch(createBlog(tmpBlog))
-    dispatch(createBlog(tmpBlog))
-    dispatch(createBlog(tmpBlog))
-    dispatch(createBlog(tmpBlog))
+    dispatch(createBlog(blogInput))
   }
 
   const handleBlogInputChange = (event) => {
