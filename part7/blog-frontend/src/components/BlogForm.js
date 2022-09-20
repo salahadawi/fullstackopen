@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, forwardRef } from 'react'
 import { useDispatch } from 'react-redux'
 import FocusLock from 'react-focus-lock'
 
@@ -22,11 +22,25 @@ import {
 
 import { EditIcon } from '@chakra-ui/icons'
 
-const BlogForm = () => {
-  const dispatch = useDispatch()
-  const initialFocusRef = useRef()
-  const { onOpen, onClose, isOpen } = useDisclosure()
+const TextInput = forwardRef(({ label, value, onChange }, ref) => {
+  return (
+    <FormControl>
+      <FormLabel>{label}</FormLabel>
+      <Input
+        id={label}
+        type="text"
+        value={value}
+        name={label}
+        onChange={onChange}
+        ref={ref}
+      />
+    </FormControl>
+  )
+})
+TextInput.displayName = 'TextInput'
 
+const Form = ({ initialFocusRef, onClose }) => {
+  const dispatch = useDispatch()
   const [blogInput, setBlogInput] = useState({
     title: '',
     author: '',
@@ -51,9 +65,46 @@ const BlogForm = () => {
     dispatch(createBlog(tmpBlog))
   }
 
+  const handleBlogInputChange = (event) => {
+    const { name, value } = event.target
+    setBlogInput({ ...blogInput, [name]: value })
+  }
+
   return (
-    // use popover for blog form
-    // split up into components
+    <form onSubmit={addBlog}>
+      <VStack>
+        <TextInput
+          label="title"
+          value={blogInput.title}
+          onChange={handleBlogInputChange}
+          ref={initialFocusRef}
+        />
+        <TextInput
+          label="author"
+          value={blogInput.author}
+          onChange={handleBlogInputChange}
+        />
+        <TextInput
+          label="url"
+          value={blogInput.url}
+          onChange={handleBlogInputChange}
+        />
+        <FormControl>
+          <Spacer />
+          <Button id="create-button" type="submit" onClick={onClose}>
+            Create
+          </Button>
+        </FormControl>
+      </VStack>
+    </form>
+  )
+}
+
+const BlogForm = () => {
+  const initialFocusRef = useRef()
+  const { onOpen, onClose, isOpen } = useDisclosure()
+
+  return (
     <Popover
       closeOnBlur={false}
       initialFocusRef={initialFocusRef}
@@ -71,53 +122,7 @@ const BlogForm = () => {
           <PopoverArrow />
           <PopoverCloseButton />
           <PopoverBody>
-            <form onSubmit={addBlog}>
-              <VStack>
-                <FormControl>
-                  <FormLabel>Title</FormLabel>
-                  <Input
-                    id="title"
-                    type="text"
-                    value={blogInput.title}
-                    name="title"
-                    onChange={({ target }) =>
-                      setBlogInput({ ...blogInput, title: target.value })
-                    }
-                    ref={initialFocusRef}
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Author</FormLabel>
-                  <Input
-                    id="author"
-                    type="text"
-                    value={blogInput.author}
-                    name="author"
-                    onChange={({ target }) =>
-                      setBlogInput({ ...blogInput, author: target.value })
-                    }
-                  />
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Url</FormLabel>
-                  <Input
-                    id="url"
-                    type="text"
-                    value={blogInput.url}
-                    name="url"
-                    onChange={({ target }) =>
-                      setBlogInput({ ...blogInput, url: target.value })
-                    }
-                  />
-                </FormControl>
-                <FormControl>
-                  <Spacer />
-                  <Button id="create-button" type="submit" onClick={onClose}>
-                    Create
-                  </Button>
-                </FormControl>
-              </VStack>
-            </form>
+            <Form initialFocusRef={initialFocusRef} onClose={onClose} />
           </PopoverBody>
         </FocusLock>
       </PopoverContent>
