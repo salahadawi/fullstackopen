@@ -40,7 +40,7 @@ describe('Blog app', function () {
     })
 
     it('A blog can be created', function () {
-      cy.contains('new blog').click()
+      cy.contains('New blog').click()
       cy.get('#title').type('a test blog')
       cy.get('#author').type('a test author')
       cy.get('#url').type('a test url')

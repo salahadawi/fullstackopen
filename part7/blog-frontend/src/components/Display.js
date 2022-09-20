@@ -1,46 +1,43 @@
 import LoginForm from './LoginForm'
 import Notification from './Notification'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 
 import BlogForm from './BlogForm'
-import Toggleable from './Toggleable'
+import BlogContainer from './BlogContainer'
 
-import { Center, VStack, Box, Heading } from '@chakra-ui/react'
+import { Center, VStack, Box, Heading, SimpleGrid } from '@chakra-ui/react'
 
 const BlogDisplay = () => {
   const blogs = useSelector((state) => state.blogs)
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
+  // const blogStyle = {
+  //   paddingTop: 10,
+  //   paddingLeft: 2,
+  //   border: 'solid',
+  //   borderWidth: 1,
+  //   marginBottom: 5,
+  // }
 
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
   return (
-    <div id="blogdisplay">
+    <SimpleGrid id="blogdisplay" spacing="8" minChildWidth="2xs" p="16">
       {sortedBlogs.map((blog) => (
-        <div key={blog.id} style={blogStyle}>
-          <Link to={`/blogs/${blog.id}`}>
-            {blog.title} {blog.author}
-          </Link>
-        </div>
+        <BlogContainer key={blog.id} blog={blog} />
       ))}
-    </div>
+    </SimpleGrid>
   )
 }
 
 const LoggedInDisplay = () => {
   return (
-    <>
-      <Toggleable buttonLabel="new blog">
-        <BlogForm />
-      </Toggleable>
+    <Box bg="gray.50">
+      {/* <Flex pt="5" pl="5"> */}
+      {/* <Toggleable buttonLabel="New blog"> */}
+      <BlogForm />
+      {/* </Toggleable> */}
+      {/* </Flex> */}
       <BlogDisplay />
-    </>
+    </Box>
   )
 }
 

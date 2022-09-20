@@ -36,7 +36,6 @@ const App = () => {
     <Box>
       <Navigation />
       <Notification />
-      <h2>blog app</h2>
       <Routes>
         <Route path="/" element={<Display.LoggedInDisplay />} />
         <Route path="/users" element={<Users />} />

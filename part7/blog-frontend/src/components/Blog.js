@@ -42,6 +42,7 @@ const Blog = () => {
           )
         })
     }
+    // redirect to blogs page
   }
 
   if (!blog) return null

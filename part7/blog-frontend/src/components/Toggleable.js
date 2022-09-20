@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
+
 import { toggleVisibility } from '../reducers/blogFormReducer'
+
+import { Button, Box } from '@chakra-ui/react'
 
 const Toggleable = ({ children, buttonLabel }) => {
   const dispatch = useDispatch()
@@ -8,20 +11,26 @@ const Toggleable = ({ children, buttonLabel }) => {
 
   if (visible) {
     return (
-      <>
+      <Box>
         {children}
-        <button onClick={() => dispatch(toggleVisibility(visible))}>
-          cancel
-        </button>
-      </>
+        <Button
+          colorScheme="teal"
+          onClick={() => dispatch(toggleVisibility(visible))}
+        >
+          Cancel
+        </Button>
+      </Box>
     )
   } else {
     return (
-      <>
-        <button onClick={() => dispatch(toggleVisibility(visible))}>
+      <Box>
+        <Button
+          colorScheme="teal"
+          onClick={() => dispatch(toggleVisibility(visible))}
+        >
           {buttonLabel}
-        </button>
-      </>
+        </Button>
+      </Box>
     )
   }
 }
