@@ -1,5 +1,7 @@
 import { useSelector } from 'react-redux'
 
+import { Alert, AlertIcon, AlertDescription } from '@chakra-ui/react'
+
 const Notification = () => {
   // use toast from chakra ui ??
   const notification = useSelector((state) => state.notification)
@@ -7,9 +9,10 @@ const Notification = () => {
     return null
   }
   return (
-    <div id="notification" className={notification.style}>
-      {notification.text}
-    </div>
+    <Alert id="notification" status={notification.style}>
+      <AlertIcon />
+      <AlertDescription>{notification.text}</AlertDescription>
+    </Alert>
   )
 }
 
