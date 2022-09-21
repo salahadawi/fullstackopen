@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setNotificationWithTimeout } from '../reducers/notificationReducer'
@@ -31,6 +31,7 @@ const Blog = () => {
   const id = useParams().id
   const blogs = useSelector((state) => state.blogs)
   const blog = blogs.find((b) => b.id === id)
+  const navigate = useNavigate()
 
   const handleLike = (id) => {
     dispatch(likeBlog(id)).catch((error) => {
@@ -55,6 +56,7 @@ const Blog = () => {
               'success'
             )
           )
+          navigate('/')
         })
         .catch((error) => {
           dispatch(
