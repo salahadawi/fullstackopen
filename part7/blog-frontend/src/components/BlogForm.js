@@ -22,15 +22,15 @@ import {
 
 import { EditIcon } from '@chakra-ui/icons'
 
-const TextInput = forwardRef(({ label, value, onChange }, ref) => {
+const TextInput = forwardRef(({ label, value, onChange, name }, ref) => {
   return (
     <FormControl>
       <FormLabel>{label}</FormLabel>
       <Input
-        id={label}
+        id={name}
         type="text"
         value={value}
-        name={label}
+        name={name}
         onChange={onChange}
         ref={ref}
       />
@@ -64,17 +64,20 @@ const Form = ({ initialFocusRef, onClose }) => {
           label="Title"
           value={blogInput.title}
           onChange={handleBlogInputChange}
+          name="title"
           ref={initialFocusRef}
         />
         <TextInput
           label="Author"
           value={blogInput.author}
           onChange={handleBlogInputChange}
+          name="author"
         />
         <TextInput
           label="Url"
           value={blogInput.url}
           onChange={handleBlogInputChange}
+          name="url"
         />
         <FormControl>
           <Spacer />
