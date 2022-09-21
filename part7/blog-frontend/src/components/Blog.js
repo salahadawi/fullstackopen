@@ -6,6 +6,26 @@ import { setNotificationWithTimeout } from '../reducers/notificationReducer'
 
 import CommentForm from './CommentForm'
 
+import {
+  Heading,
+  VStack,
+  Text,
+  Button,
+  Link,
+  Center,
+  HStack,
+  List,
+  ListItem,
+  ListIcon,
+} from '@chakra-ui/react'
+
+import {
+  ExternalLinkIcon,
+  DeleteIcon,
+  ChevronRightIcon,
+} from '@chakra-ui/icons'
+import HeartIcon from '../icons/heart'
+
 const Blog = () => {
   const dispatch = useDispatch()
   const id = useParams().id
@@ -47,24 +67,53 @@ const Blog = () => {
 
   if (!blog) return null
   return (
-    <div>
-      <h2>
-        {blog.title} {blog.author}
-      </h2>
-      <a href={blog.url}>{blog.url}</a>
-      <p>
-        {blog.likes} likes{' '}
-        <button onClick={() => handleLike(blog.id)}>like</button>
-      </p>
-      {blog.user ? <div>added by {blog.user.name}</div> : null}
-      <button onClick={() => handleRemove(blog.id)}>remove</button>
-      <h3>comments</h3>
-      <CommentForm blog={blog} />
-      <ul>
-        {blog.comments &&
-          blog.comments.map((comment, index) => <li key={index}>{comment}</li>)}
-      </ul>
-    </div>
+    <Center>
+      <VStack
+        alignItems="start"
+        spacing="4"
+        bg="teal.50"
+        px="64px"
+        py="48px"
+        rounded="xl"
+        m="8"
+      >
+        <Heading>{blog.title}</Heading>
+        <Heading size="md">{blog.author}</Heading>
+        <Link href={blog.url} isExternal>
+          {blog.url} <ExternalLinkIcon />
+        </Link>
+        <Text>added by {blog.user ? blog.user.name : 'Unknown User'}</Text>
+        <HStack w="100%" justify="space-between" pt="8">
+          <Text>{blog.likes} likes </Text>
+          <HStack>
+            <Button
+              leftIcon={<HeartIcon />}
+              colorScheme="teal"
+              onClick={() => handleLike(blog.id)}
+            >
+              Like
+            </Button>
+            <Button
+              leftIcon={<DeleteIcon />}
+              colorScheme="teal"
+              onClick={() => handleRemove(blog.id)}
+            >
+              Delete
+            </Button>
+          </HStack>
+        </HStack>
+        <CommentForm blog={blog} />
+        <List>
+          {blog.comments &&
+            blog.comments.map((comment, index) => (
+              <ListItem key={index}>
+                <ListIcon as={ChevronRightIcon} color="teal" />
+                {comment}
+              </ListItem>
+            ))}
+        </List>
+      </VStack>
+    </Center>
   )
 }
 

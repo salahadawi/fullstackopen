@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 
 import { createComment } from '../reducers/blogReducer'
 
+import { Input, Button, FormControl, FormLabel, HStack } from '@chakra-ui/react'
+
 const CommentForm = ({ blog }) => {
   const dispatch = useDispatch()
 
@@ -17,13 +19,22 @@ const CommentForm = ({ blog }) => {
 
   return (
     <form onSubmit={addComment}>
-      <input
-        type="text"
-        value={comment}
-        name="comment"
-        onChange={({ target }) => setComment(target.value)}
-      />
-      <button type="submit">add comment</button>
+      <FormControl>
+        <FormLabel>Comment</FormLabel>
+        <HStack templateColumns="repeat(2, 1fr)">
+          <Input
+            type="text"
+            value={comment}
+            name="comment"
+            onChange={({ target }) => setComment(target.value)}
+            bg="white"
+            w="60%"
+          />
+          <Button colorScheme="teal" type="submit" w="40%">
+            add comment
+          </Button>
+        </HStack>
+      </FormControl>
     </form>
   )
 }
