@@ -59,9 +59,7 @@ const Blog = () => {
           navigate('/')
         })
         .catch((error) => {
-          dispatch(
-            setNotificationWithTimeout(`error: ${error.response.data.error}`)
-          )
+          dispatch(setNotificationWithTimeout(error.response.data.error))
         })
     }
     // redirect to blogs page
