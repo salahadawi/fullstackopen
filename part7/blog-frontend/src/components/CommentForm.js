@@ -21,7 +21,7 @@ const CommentForm = ({ blog }) => {
     <form onSubmit={addComment}>
       <FormControl>
         <FormLabel>Comment</FormLabel>
-        <HStack templateColumns="repeat(2, 1fr)">
+        <HStack>
           <Input
             type="text"
             value={comment}
