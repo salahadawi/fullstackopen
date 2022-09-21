@@ -13,7 +13,6 @@ const Navigation = () => {
     <Box color="teal">
       <Grid
         templateColumns="repeat(3, 1fr)"
-        w="100%"
         px="6"
         py="4"
         justify="space-between"
