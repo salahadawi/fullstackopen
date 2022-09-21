@@ -61,18 +61,18 @@ const Form = ({ initialFocusRef, onClose }) => {
     <form onSubmit={addBlog}>
       <VStack>
         <TextInput
-          label="title"
+          label="Title"
           value={blogInput.title}
           onChange={handleBlogInputChange}
           ref={initialFocusRef}
         />
         <TextInput
-          label="author"
+          label="Author"
           value={blogInput.author}
           onChange={handleBlogInputChange}
         />
         <TextInput
-          label="url"
+          label="Url"
           value={blogInput.url}
           onChange={handleBlogInputChange}
         />
