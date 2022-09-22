@@ -32,38 +32,6 @@ describe('<Notification />', () => {
     expect(NotificationElement.container).toBeEmptyDOMElement()
   })
 
-  test('success message has style success', () => {
-    const initialState = {
-      text: 'Test message',
-      style: 'success',
-      timeoutId: null,
-    }
-
-    const NotificationElement = renderWithProviders(<Notification />, {
-      preloadedState: { notification: initialState },
-    })
-    expect(
-      screen.getByText(initialState.text, { exact: false })
-    ).toBeInTheDocument()
-    expect(NotificationElement.container.firstChild).toHaveClass('success')
-  })
-
-  test('error message has style error', () => {
-    const initialState = {
-      text: 'Test message',
-      style: 'error',
-      timeoutId: null,
-    }
-
-    const NotificationElement = renderWithProviders(<Notification />, {
-      preloadedState: { notification: initialState },
-    })
-    expect(
-      screen.getByText(initialState.text, { exact: false })
-    ).toBeInTheDocument()
-    expect(NotificationElement.container.firstChild).toHaveClass('error')
-  })
-
   test('notification is displayed for specified time', async () => {
     const text = 'Test message'
     const store = setupStore()
