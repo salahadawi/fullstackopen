@@ -27,10 +27,7 @@ describe('Blog app', function () {
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()
 
-      cy.get('.error')
-        .should('contain', 'Wrong username or password')
-        .and('have.css', 'color', 'rgb(255, 0, 0)')
-        .and('have.css', 'border-style', 'solid')
+      cy.get('#notification').should('contain', 'Wrong username or password')
     })
   })
 
@@ -40,7 +37,7 @@ describe('Blog app', function () {
     })
 
     it('A blog can be created', function () {
-      cy.contains('New blog').click()
+      cy.contains('Create New Blog').click()
       cy.get('#title').type('a test blog')
       cy.get('#author').type('a test author')
       cy.get('#url').type('a test url')
@@ -107,13 +104,13 @@ describe('Blog app', function () {
       })
 
       it('a blog can be liked', function () {
-        cy.contains('like').click()
+        cy.contains('Like').click()
         cy.contains('1 likes')
       })
 
       it('a blog can be removed', function () {
         cy.clock(new Date())
-        cy.contains('remove').click()
+        cy.contains('Delete').click()
 
         cy.get('#notification').contains(
           'blog a test blog by a test author removed'
@@ -124,7 +121,7 @@ describe('Blog app', function () {
 
       it('comments can be added', function () {
         cy.get('[type=text]').type('a test comment')
-        cy.contains('add comment').click()
+        cy.contains('Add comment').click()
 
         cy.contains('a test comment')
       })
@@ -148,11 +145,11 @@ describe('Blog app', function () {
       })
 
       it('a blog created by other user can not be removed', function () {
-        cy.contains('remove').click()
-        cy.get('#notification')
-          .should('contain', 'error: only the creator of a blog can delete it')
-          .and('have.css', 'color', 'rgb(255, 0, 0)')
-          .and('have.css', 'border-style', 'solid')
+        cy.contains('Delete').click()
+        cy.get('#notification').should(
+          'contain',
+          'only the creator of a blog can delete it'
+        )
         cy.contains('a test blog 2')
       })
     })
