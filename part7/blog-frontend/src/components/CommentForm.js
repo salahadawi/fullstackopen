@@ -31,7 +31,7 @@ const CommentForm = ({ blog }) => {
             w="60%"
           />
           <Button colorScheme="teal" type="submit" w="40%">
-            add comment
+            Add comment
           </Button>
         </HStack>
       </FormControl>
