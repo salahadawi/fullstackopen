@@ -11,12 +11,7 @@ const Navigation = () => {
 
   return (
     <Box color="teal">
-      <Grid
-        templateColumns="repeat(3, 1fr)"
-        px="6"
-        py="4"
-        justify="space-between"
-      >
+      <Grid templateColumns="repeat(3, 1fr)" px="6" py="4" maxW="1280" m="auto">
         <HStack as="nav" spacing="5">
           <NavigationButton to="/">Blogs</NavigationButton>
           <NavigationButton to="/users">Users</NavigationButton>
