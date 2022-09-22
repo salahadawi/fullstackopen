@@ -14,7 +14,7 @@ const UserLink = ({ user }) => {
   )
 }
 
-const BlogContainer = ({ blog }) => (
+const BlogContainer = ({ blog, hideUser }) => (
   <VStack
     spacing="4"
     align="normal"
@@ -39,10 +39,10 @@ const BlogContainer = ({ blog }) => (
           {blog.likes} <ArrowUpIcon />
         </Text>
         <Text>
-          {blog.comments.length} <ChatIcon />
+          {blog.comments ? blog.comments.length : ''} <ChatIcon />
         </Text>
       </HStack>
-      <UserLink user={blog.user} />
+      {hideUser || <UserLink user={blog.user} />}
     </HStack>
   </VStack>
 )
