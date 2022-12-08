@@ -25,7 +25,6 @@ const NewBook = (props) => {
       variables: { title, author, published: Number(published), genres },
     });
 
-    console.log(title, author, Number(published), genres);
     setTitle("");
     setPublished("");
     setAuthor("");
