@@ -25,7 +25,6 @@ const Authors = (props) => {
   const submit = async (event) => {
     event.preventDefault();
 
-    console.log("submitting", name, born);
     editAuthor({
       variables: { name: name.value, setBornTo: Number(born) },
     });
