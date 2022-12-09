@@ -62,7 +62,8 @@ const resolvers = {
     },
     allBooks: async (root, args) => {
       let ret = await Book.find({}).populate("author");
-      if (args.author) ret = ret.filter((book) => book.author === args.author);
+      if (args.author)
+        ret = ret.filter((book) => book.author.name === args.author);
       if (args.genre)
         ret = ret.filter((book) => book.genres.includes(args.genre));
       return ret;
