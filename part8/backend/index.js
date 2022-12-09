@@ -81,14 +81,12 @@ const resolvers = {
       const book = new Book({ ...args, author }).save();
       return book;
     },
-    editAuthor: (root, args) => {
-      const author = authors.find((author) => author.name === args.name);
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name });
       if (!author) return null;
-      const updatedAuthor = { ...author, born: args.setBornTo };
-      authors = authors.map((author) =>
-        author.name === args.name ? updatedAuthor : author
-      );
-      return updatedAuthor;
+      author.born = args.setBornTo;
+      await author.save();
+      return author;
     },
   },
 };
