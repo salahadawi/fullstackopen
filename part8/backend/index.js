@@ -69,8 +69,9 @@ const typeDefs = gql`
 
 const resolvers = {
   Author: {
-    bookCount: (root) => {
-      return books.filter((book) => book.author === root.name).length;
+    bookCount: async (root) => {
+      const books = await Book.find({}).populate("author");
+      return books.filter((book) => book.author.name === root.name).length;
     },
   },
   Query: {
