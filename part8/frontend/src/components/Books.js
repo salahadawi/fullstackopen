@@ -31,6 +31,7 @@ const Books = (props) => {
   const [showGenre, setShowGenre] = useState("all");
   const result = useQuery(GET_ALL_BOOKS, {
     variables: { genre: showGenre === "all" ? null : showGenre },
+    pollInterval: 500,
   });
 
   if (!props.show) {

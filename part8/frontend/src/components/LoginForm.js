@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN } from "../queries";
+
+import { LOGIN, GET_ALL_BOOKS, ME } from "../queries";
 
 const LoginForm = ({ show, setError, setToken }) => {
   const [username, setUsername] = useState("");
@@ -10,6 +11,7 @@ const LoginForm = ({ show, setError, setToken }) => {
     onError: (error) => {
       setError(error.graphQLErrors[0].message);
     },
+    refetchQueries: [{ query: GET_ALL_BOOKS }, { query: ME }],
   });
 
   useEffect(() => {
@@ -28,6 +30,8 @@ const LoginForm = ({ show, setError, setToken }) => {
     event.preventDefault();
 
     login({ variables: { username, password } });
+    setUsername("");
+    setPassword("");
   };
 
   return (
