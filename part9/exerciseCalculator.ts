@@ -34,4 +34,24 @@ const calculateExercises = (
   };
 };
 
-console.log(calculateExercises([3, 0, 2, 4.5, 0, 3, 1], 2));
+const parseArguments = (args: Array<string>): Array<number> => {
+  if (args.length < 4) {
+    throw new Error("Not enough arguments");
+  }
+
+  for (let i = 2; i < args.length; i++) {
+    if (isNaN(Number(args[i]))) {
+      throw new Error("Provided values were not numbers!");
+    }
+  }
+  return args.slice(2).map((arg) => Number(arg));
+};
+
+try {
+  const [target, ...dailyExercises] = parseArguments(process.argv);
+  console.log(calculateExercises(dailyExercises, target));
+} catch (e) {
+  console.log("Error, something bad happened, message: ", e.message);
+}
+
+export {};
