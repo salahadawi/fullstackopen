@@ -35,23 +35,32 @@ const calculateExercises = (
 };
 
 const parseArguments = (args: Array<string>): Array<number> => {
-  if (args.length < 4) {
+  if (args.length < 2) {
     throw new Error("Not enough arguments");
   }
 
-  for (let i = 2; i < args.length; i++) {
+  for (let i = 0; i < args.length; i++) {
     if (isNaN(Number(args[i]))) {
       throw new Error("Provided values were not numbers!");
     }
   }
-  return args.slice(2).map((arg) => Number(arg));
+  return args.slice(0).map((arg) => Number(arg));
 };
 
-try {
-  const [target, ...dailyExercises] = parseArguments(process.argv);
-  console.log(calculateExercises(dailyExercises, target));
-} catch (e) {
-  console.log("Error, something bad happened, message: ", e.message);
-}
+export const exerciseCalculator = (
+  dailyExercises: string[],
+  target: string
+): Result | null => {
+  try {
+    const [targetParsed, ...dailyExercisesParsed] = parseArguments([
+      target,
+      ...dailyExercises,
+    ]);
+    return calculateExercises(dailyExercisesParsed, targetParsed);
+  } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    throw new Error("Something bad happened, message: " + e.message);
+  }
+};
 
 export {};
