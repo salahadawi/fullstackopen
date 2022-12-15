@@ -12,23 +12,28 @@ const calculateBmi = (height: number, weight: number): string => {
 };
 
 const parseArguments = (args: Array<string>): Array<number> => {
-  if (args.length < 4) {
+  if (args.length < 2) {
     throw new Error("Not enough arguments");
   }
-  if (args.length > 4) {
+  if (args.length > 2) {
     throw new Error("Too many arguments");
   }
 
-  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
-    return [Number(args[2]), Number(args[3])];
+  if (!isNaN(Number(args[0])) && !isNaN(Number(args[1]))) {
+    return [Number(args[0]), Number(args[1])];
   } else {
     throw new Error("Provided values were not numbers!");
   }
 };
 
-try {
-  const [height, weight] = parseArguments(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (e) {
-  console.log("Error, something bad happened, message: ", e.message);
-}
+export const bmiCalculator = (
+  height: string,
+  weight: string
+): string | null => {
+  try {
+    const [heightNum, weightNum] = parseArguments([height, weight]);
+    return calculateBmi(heightNum, weightNum);
+  } catch (e) {
+    throw new Error("Something bad happened, message: " + e.message);
+  }
+};
