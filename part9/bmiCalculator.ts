@@ -34,6 +34,7 @@ export const bmiCalculator = (
     const [heightNum, weightNum] = parseArguments([height, weight]);
     return calculateBmi(heightNum, weightNum);
   } catch (e) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     throw new Error("Something bad happened, message: " + e.message);
   }
 };
