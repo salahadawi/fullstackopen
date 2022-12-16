@@ -8,7 +8,7 @@ import theme from "../theme";
 const styles = StyleSheet.create({
   container: {
     paddingTop: Constants.statusBarHeight,
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.appBar,
     height: 100,
     justifyContent: "center",
     paddingHorizontal: 10,
