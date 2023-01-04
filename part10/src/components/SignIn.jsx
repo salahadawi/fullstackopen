@@ -1,9 +1,10 @@
-import { Text, Pressable, View, StyleSheet } from "react-native";
+import { Pressable, View, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import * as yup from "yup";
 
 import FormikTextInput from "./FormikTextInput";
 import theme from "../theme";
+import Text from "./Text";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
