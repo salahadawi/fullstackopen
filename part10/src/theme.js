@@ -5,6 +5,7 @@ const theme = {
     white: "#fff",
     background: "#e1e4e8",
     appBar: "#24292e",
+    error: "#d73a4a",
   },
 };
 
