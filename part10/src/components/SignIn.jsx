@@ -8,7 +8,6 @@ import theme from "../theme";
 import Text from "./Text";
 
 import useSignIn from "../hooks/useSignIn";
-import createApolloClient from "../utils/apolloClient";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
